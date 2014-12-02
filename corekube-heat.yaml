@@ -101,24 +101,15 @@ resources:
           template: |
             #cloud-config
 
-            write_files:
-              - content: |
-                  StrictHostKeyChecking no
-                  UserKnownHostsFile /dev/null
-                  LogLevel QUIET
-                path: /root/.ssh/config
-                permissions: '0644'
             coreos:
               etcd:
                 name: overlord
                 discovery: http://%discovery%:4001/v2/keys/_etcd/registry/%uuid%
                 addr: $private_ipv4:4001
                 peer-addr: $private_ipv4:7001
-
               update:
                 group: alpha
                 reboot-strategy: off
-
               units:
                 - name: etcd.service
                   command: start
@@ -128,7 +119,7 @@ resources:
                     [Socket]
                     # Talk to the API over a Unix domain socket (default)
                     ListenStream=/var/run/fleet.sock
-                    # Talk to the API over an exposed port, uncomment to enable and choose a port
+                    # Talk to the API over an exposed port
                     ListenStream=10001
                     Service=fleet-local.service
 
@@ -197,15 +188,12 @@ resources:
                     discovery: http://%discovery%:4001/v2/keys/_etcd/registry/%uuid%
                     addr: $private_ipv4:4001
                     peer-addr: $private_ipv4:7001
-
                   fleet:
                     public-ip: $private_ipv4
                     metadata: kubernetes_role=master
-
                   update:
                     group: alpha
                     reboot-strategy: off
-
                   units:
                     - name: etcd.service
                       command: start
@@ -289,15 +277,12 @@ resources:
                     discovery: http://%discovery%:4001/v2/keys/_etcd/registry/%uuid%
                     addr: $private_ipv4:4001
                     peer-addr: $private_ipv4:7001
-
                   fleet:
                     public-ip: $private_ipv4
                     metadata: kubernetes_role=minion
-
                   update:
                     group: alpha
                     reboot-strategy: off
-                      
                   units:
                     - name: etcd.service
                       command: start
