@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"setup_kubernetes/lib"
@@ -55,17 +54,17 @@ func main() {
 
 	lib.CreateUnitFiles(&fleetMachines, unitPathInfo)
 
-	// Start & check state for download & role units
-	for _, v := range unitPathInfo {
-		lib.StartUnitsInDir(v["path"])
-		lib.CheckUnitsState(v["path"], v["activeState"], v["subState"])
-	}
+	//// Start & check state for download & role units
+	//for _, v := range unitPathInfo {
+	//	lib.StartUnitsInDir(v["path"])
+	//	lib.CheckUnitsState(v["path"], v["activeState"], v["subState"])
+	//}
 
-	// Register minions with master
-	masterIP := lib.FindInfoForRole("master", &fleetMachines)[0]
-	minionIPs := lib.FindInfoForRole("minion", &fleetMachines)
-	k8sAPI := fmt.Sprintf("http://%s:8080", masterIP)
-	for _, minionIP := range minionIPs {
-		lib.Register(k8sAPI, minionIP)
-	}
+	//// Register minions with master
+	//masterIP := lib.FindInfoForRole("master", &fleetMachines)[0]
+	//minionIPs := lib.FindInfoForRole("minion", &fleetMachines)
+	//k8sAPI := fmt.Sprintf("http://%s:8080", masterIP)
+	//for _, minionIP := range minionIPs {
+	//	lib.Register(k8sAPI, minionIP)
+	//}
 }
