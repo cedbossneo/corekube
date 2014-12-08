@@ -14,32 +14,33 @@ import (
 
 type Map map[string]interface{}
 
-type FleetMachinesAbstract struct {
+type Result struct {
 	Action string
-	Node   FleetMachinesNode
+	Node   ResultNode
 }
 
-type FleetMachinesNode struct {
+type ResultNode struct {
 	Key           string
 	Dir           bool
-	Nodes         []FleetMachinesNodeNodesValue
+	Nodes         ResultNodes
 	ModifiedIndex int
 	CreatedIndex  int
 }
 
-type FleetMachinesNodeNodesValue struct {
+type ResultNodes []ResultNode
+type ResultNode struct {
 	Key           string
 	Dir           bool
 	ModifiedIndex int
 	CreatedIndex  int
 }
 
-type FleetMachineObject struct {
+type NodeResult struct {
 	Action string
-	Node   FleetMachineObjectNode
+	Node   Node
 }
 
-type FleetMachineObjectNode struct {
+type Node struct {
 	Key           string
 	Value         string
 	Expiration    string
@@ -48,6 +49,7 @@ type FleetMachineObjectNode struct {
 	CreatedIndex  int
 }
 
+type FleetMachines []FleetMachine
 type FleetMachine struct {
 	ID             string
 	PublicIP       string
@@ -67,17 +69,6 @@ type FleetUnitState struct {
 
 type FleetUnitStates struct {
 	States []FleetUnitState
-}
-
-func (f FleetMachinesNodeNodesValue) String() string {
-	output := fmt.Sprintf(
-		"Key: %s | Dir: %t | ModifiedIndex: %d | CreatedIndex: %d",
-		f.Key,
-		f.Dir,
-		f.ModifiedIndex,
-		f.CreatedIndex,
-	)
-	return output
 }
 
 func (m Map) String() string {

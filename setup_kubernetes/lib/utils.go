@@ -71,47 +71,67 @@ func getFullAPIURL(port, etcdAPIPath string) string {
 	return url
 }
 
-func getFleetMachines(fleetMachinesAbstract *FleetMachinesAbstract) {
+func getFleetMachines(fleetResult *Result) {
 	// Issue request to get machines & parse it. Sleep if cluster not ready yet
 	url := getFullAPIURL("4001", "v2/keys/_coreos.com/fleet/machines")
 	jsonResponse := httpGetRequest(url)
-	err := json.Unmarshal(jsonResponse, fleetMachinesAbstract)
+	err := json.Unmarshal(jsonResponse, fleetResult)
 	checkForErrors(err)
 
 }
 
-func Wait(fleetMachinesAbstract *FleetMachinesAbstract) {
+func Wait(fleetResult *Result) {
 
-	getFleetMachines(fleetMachinesAbstract)
-	totalMachines := len(fleetMachinesAbstract.Node.Nodes)
+	getFleetMachines(fleetResult)
+	totalMachines := len(fleetResult.Node.Nodes)
 
-	for {
-		log.Printf("Current number of machines found: (%d)", totalMachines)
-		time.Sleep(1 * time.Second)
+	var fleetMachines FleetMachines
 
-		getFleetMachines(fleetMachinesAbstract)
-		totalMachines = len(fleetMachinesAbstract.Node.Nodes)
+	//for {
+	//log.Printf("Current number of machines found: (%d)", totalMachines)
+	//time.Sleep(500 * time.Millisecond)
+	//---
+
+	for _, resultNode := range fleetResult.Node.Nodes {
+
+		// Get fleet metadata
+		var fleetMachine lib.FleetMachine
+		WaitForFleetMachineMetadata(&resultNode, &fleetMachine)
+
+		fleetMachines = append(
+			fleetMachines, fleetMachine)
+		log.Printf(
+			"\nFleet Machine:\n-- ID: %s\n-- PublicIP: %s\n-- Metadata: %s\n\n",
+			fleetMachine.ID,
+			fleetMachine.PublicIP,
+			fleetMachine.Metadata.String(),
+		)
 	}
+
+	//---
+	//getFleetMachines(fleetResult)
+	//totalMachines = len(fleetResult.Node.Nodes)
+	//}
 }
 
 func WaitForFleetMachineMetadata(
-	value *FleetMachinesNodeNodesValue,
+	resultNode *ResultNode,
 	fleetMachine *FleetMachine,
 ) {
 
 	// Issue request to get machines & parse it. Sleep if cluster not ready yet
-	id := strings.Split(value.Key, "fleet/machines/")[1]
+	id := strings.Split(resultNode.Key, "fleet/machines/")[1]
 	path := fmt.Sprintf("v2/keys/_coreos.com/fleet/machines/%s/object", id)
 
 	url := getFullAPIURL("4001", path)
 	jsonResponse := httpGetRequest(url)
 
-	var fleetMachineObject FleetMachineObject
-	err := json.Unmarshal(jsonResponse, &fleetMachineObject)
+	var nodeResult NodeResult
+	err := json.Unmarshal(jsonResponse, &nodeResult)
 	checkForErrors(err)
 
 	err = json.Unmarshal(
-		[]byte(fleetMachineObject.Node.Value), &fleetMachine)
+		[]byte(nodeResult.Node.Value), &fleetMachine)
 	checkForErrors(err)
 
 	for len(fleetMachine.Metadata) == 0 ||
@@ -121,7 +141,7 @@ func WaitForFleetMachineMetadata(
 		time.Sleep(1 * time.Second)
 
 		err = json.Unmarshal(
-			[]byte(fleetMachineObject.Node.Value), &fleetMachine)
+			[]byte(nodeResult.Node.Value), &fleetMachine)
 		checkForErrors(err)
 
 	}
