@@ -83,7 +83,7 @@ func getFleetMachines(fleetResult *Result) {
 func Wait(fleetResult *Result) {
 
 	getFleetMachines(fleetResult)
-	totalMachines := len(fleetResult.Node.Nodes)
+	//totalMachines := len(fleetResult.Node.Nodes)
 
 	var fleetMachines FleetMachines
 
