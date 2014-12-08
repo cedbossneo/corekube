@@ -58,15 +58,15 @@ func httpPutRequest(urlStr string, data interface{}, dataIsJSON bool) *http.Resp
 
 	switch dataIsJSON {
 	case true:
-		data = data.([]byte)
-		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(data))
+		var dataBytes = data.([]byte)
+		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(dataBytes))
 		req.Header.Set("Content-Type", "application/json")
 	case false:
-		data = data.(url.Values)
-		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(data))
-		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(data.Encode()))
+		var dataURL = data.(url.Values)
+		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(dataURL))
+		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataURL.Encode()))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-		req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+		req.Header.Add("Content-Length", strconv.Itoa(len(dataURL.Encode())))
 	}
 
 	client := &http.Client{}
