@@ -19,18 +19,11 @@ type Result struct {
 	Node   ResultNode
 }
 
-type ResultNode struct {
-	Key           string
-	Dir           bool
-	Nodes         ResultNodes
-	ModifiedIndex int
-	CreatedIndex  int
-}
-
 type ResultNodes []ResultNode
 type ResultNode struct {
 	Key           string
 	Dir           bool
+	Nodes         ResultNodes
 	ModifiedIndex int
 	CreatedIndex  int
 }
