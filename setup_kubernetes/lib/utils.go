@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -52,9 +53,17 @@ func httpGetRequest(url string) []byte {
 	return body
 }
 
-func httpPutRequest(url string, json_data []byte) *http.Response {
-	req, _ := http.NewRequest("PUT", url, bytes.NewBuffer(json_data))
-	req.Header.Set("Content-Type", "application/json")
+func httpPutRequest(url string, data []byte, bool dataIsJSON) *http.Response {
+	req, _ := http.NewRequest("PUT", url, bytes.NewBuffer(data))
+
+	switch dataIsJSON {
+	case true:
+		req.Header.Set("Content-Type", "application/json")
+	case false:
+		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+		req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+
+	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

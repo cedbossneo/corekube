@@ -12,6 +12,9 @@ import (
 	"github.com/coreos/fleet/unit"
 )
 
+// Types Result, ResultNode, NodeResult & Node adapted from:
+// https://github.com/coreos/fleet/blob/master/etcd/result.go
+
 type Map map[string]interface{}
 
 type Result struct {
@@ -104,7 +107,7 @@ func StartUnitsInDir(path string) {
 				f.Name(),
 				options_str)
 
-			resp := httpPutRequest(url, []byte(json_str))
+			resp := httpPutRequest(url, []byte(json_str), true)
 			statusCode = resp.StatusCode
 
 			if statusCode != 204 {
