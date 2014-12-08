@@ -3,24 +3,16 @@ package main
 import (
 	"fmt"
 	"log"
-	"os"
 	"setup_kubernetes/lib"
 )
 
 // Access the CoreOS / docker etcd API to extract machine information
 func main() {
-	masterCount, minionCount := lib.SetupFlags()
-	expectedMachineCount := masterCount + minionCount
-
-	if expectedMachineCount <= 0 {
-		lib.Usage()
-		os.Exit(2)
-	}
-
 	// Get fleet machines & metadata
 	var fleetMachinesAbstract lib.FleetMachinesAbstract
-	lib.WaitForFleetMachines(&fleetMachinesAbstract, expectedMachineCount)
+	lib.Wait(&fleetMachinesAbstract)
 
+	// TODO: from here on remove
 	var fleetMachines []lib.FleetMachine
 	for _, value := range fleetMachinesAbstract.Node.Nodes {
 
@@ -29,7 +21,7 @@ func main() {
 		lib.WaitForFleetMachineMetadata(
 			&value,
 			&fleetMachine,
-			expectedMachineCount)
+		)
 
 		fleetMachines = append(
 			fleetMachines, fleetMachine)

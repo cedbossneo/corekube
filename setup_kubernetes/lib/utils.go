@@ -71,20 +71,22 @@ func getFullAPIURL(port, etcdAPIPath string) string {
 	return url
 }
 
-func WaitForFleetMachines(
-	fleetMachinesAbstract *FleetMachinesAbstract, expectedMachineCount int) {
-
+func getFleetMachines(fleetMachinesAbstract *FleetMachinesAbstract) {
 	// Issue request to get machines & parse it. Sleep if cluster not ready yet
 	url := getFullAPIURL("4001", "v2/keys/_coreos.com/fleet/machines")
 	jsonResponse := httpGetRequest(url)
 	err := json.Unmarshal(jsonResponse, fleetMachinesAbstract)
 	checkForErrors(err)
+
+}
+
+func Wait(fleetMachinesAbstract *FleetMachinesAbstract) {
+
+	getFleetMachines(fleetMachinesAbstract)
 	totalMachines := len(fleetMachinesAbstract.Node.Nodes)
 
-	for totalMachines < expectedMachineCount {
-		log.Printf("Waiting for all (%d) machines to be available "+
-			"in fleet. Currently at: (%d)",
-			expectedMachineCount, totalMachines)
+	for {
+		log.Printf("Current number of machines found: (%d)", totalMachines)
 		time.Sleep(1 * time.Second)
 
 		jsonResponse := httpGetRequest(url)
@@ -97,7 +99,7 @@ func WaitForFleetMachines(
 func WaitForFleetMachineMetadata(
 	value *FleetMachinesNodeNodesValue,
 	fleetMachine *FleetMachine,
-	expectedMachineCount int) {
+) {
 
 	// Issue request to get machines & parse it. Sleep if cluster not ready yet
 	id := strings.Split(value.Key, "fleet/machines/")[1]
@@ -301,17 +303,4 @@ func CreateUnitFiles(
 func Usage() {
 	fmt.Printf("Usage: %s\n", os.Args[0])
 	flag.PrintDefaults()
-}
-
-func SetupFlags() (int, int) {
-	masterCount :=
-		flag.Int("master_count", 1,
-			"Expected number of kubernetes masters in cluster")
-	minionCount :=
-		flag.Int("minion_count", 2,
-			"Expected number of kubernetes minions in cluster")
-
-	flag.Parse()
-
-	return *masterCount, *minionCount
 }
