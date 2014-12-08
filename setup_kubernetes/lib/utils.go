@@ -54,7 +54,8 @@ func httpGetRequest(url string) []byte {
 	return body
 }
 
-func httpPutRequest(urlStr string, data interface{}, dataIsJSON bool) *http.Response {
+func httpPutRequest(
+	urlStr string, data interface{}, isJSON bool) *http.Response {
 	var req *http.Request
 
 	switch dataIsJSON {
@@ -64,7 +65,8 @@ func httpPutRequest(urlStr string, data interface{}, dataIsJSON bool) *http.Resp
 		req.Header.Set("Content-Type", "application/json")
 	case false:
 		var dataURL = data.(url.Values)
-		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataURL.Encode()))
+		req, _ := http.NewRequest(
+			"PUT", urlStr, bytes.NewBufferString(dataURL.Encode()))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(dataURL.Encode())))
 	}
