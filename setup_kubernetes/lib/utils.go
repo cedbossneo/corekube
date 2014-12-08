@@ -58,7 +58,7 @@ func httpPutRequest(
 	urlStr string, data interface{}, isJSON bool) *http.Response {
 	var req *http.Request
 
-	switch dataIsJSON {
+	switch isJSON {
 	case true:
 		var dataBytes = data.([]byte)
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(dataBytes))
