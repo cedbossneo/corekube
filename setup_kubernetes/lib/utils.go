@@ -95,7 +95,7 @@ func Wait(fleetResult *Result) {
 	for _, resultNode := range fleetResult.Node.Nodes {
 
 		// Get fleet metadata
-		var fleetMachine lib.FleetMachine
+		var fleetMachine FleetMachine
 		WaitForFleetMachineMetadata(&resultNode, &fleetMachine)
 
 		fleetMachines = append(
