@@ -53,7 +53,7 @@ func httpGetRequest(url string) []byte {
 	return body
 }
 
-func httpPutRequest(url string, data []byte, bool dataIsJSON) *http.Response {
+func httpPutRequest(url string, data []byte, dataIsJSON bool) *http.Response {
 	req, _ := http.NewRequest("PUT", url, bytes.NewBuffer(data))
 
 	switch dataIsJSON {
