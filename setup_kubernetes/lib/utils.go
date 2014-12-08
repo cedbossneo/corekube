@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 	"runtime"
@@ -53,14 +54,17 @@ func httpGetRequest(url string) []byte {
 	return body
 }
 
-func httpPutRequest(url string, data interface{}, dataIsJSON bool) *http.Response {
-	req, _ := http.NewRequest("PUT", url, bytes.NewBuffer(data))
+func httpPutRequest(urlStr string, data interface{}, dataIsJSON bool) *http.Response {
 
 	switch dataIsJSON {
 	case true:
 		data = data.([]byte)
+		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(data))
 		req.Header.Set("Content-Type", "application/json")
 	case false:
+		data = data.(url.Values)
+		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(data))
+		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(data.Encode()))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
 	}
