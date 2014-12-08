@@ -55,7 +55,7 @@ func httpGetRequest(url string) []byte {
 }
 
 func httpPutRequest(urlStr string, data interface{}, dataIsJSON bool) *http.Response {
-	var req http.NewRequest
+	var req Request
 
 	switch dataIsJSON {
 	case true:
