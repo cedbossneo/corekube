@@ -53,16 +53,16 @@ func httpGetRequest(url string) []byte {
 	return body
 }
 
-func httpPutRequest(url string, data []byte, dataIsJSON bool) *http.Response {
+func httpPutRequest(url string, data interface{}, dataIsJSON bool) *http.Response {
 	req, _ := http.NewRequest("PUT", url, bytes.NewBuffer(data))
 
 	switch dataIsJSON {
 	case true:
+		data = data.([]byte)
 		req.Header.Set("Content-Type", "application/json")
 	case false:
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
-
 	}
 
 	client := &http.Client{}
