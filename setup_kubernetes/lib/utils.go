@@ -89,9 +89,7 @@ func Wait(fleetMachinesAbstract *FleetMachinesAbstract) {
 		log.Printf("Current number of machines found: (%d)", totalMachines)
 		time.Sleep(1 * time.Second)
 
-		jsonResponse := httpGetRequest(url)
-		err := json.Unmarshal(jsonResponse, fleetMachinesAbstract)
-		checkForErrors(err)
+		getFleetMachines(fleetMachinesAbstract)
 		totalMachines = len(fleetMachinesAbstract.Node.Nodes)
 	}
 }
