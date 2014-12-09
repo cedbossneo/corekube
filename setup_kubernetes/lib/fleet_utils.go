@@ -148,8 +148,8 @@ func CheckUnitsState(path, activeState, subState string) {
 
 	var fleetUnitStates FleetUnitStates
 
-	path := fmt.Sprintf("%s/state", FLEET_API_VERSION)
-	url := getFullAPIURL(FLEET_API_PORT, path)
+	urlPath := fmt.Sprintf("%s/state", FLEET_API_VERSION)
+	url := getFullAPIURL(FLEET_API_PORT, urlPath)
 	jsonResponse := httpGetRequest(url)
 	err := json.Unmarshal(jsonResponse, &fleetUnitStates)
 	checkForErrors(err)
