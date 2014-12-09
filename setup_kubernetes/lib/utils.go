@@ -69,13 +69,14 @@ func httpPutRequest(
 	}
 
 	client := &http.Client{}
-	_, _ := client.Do(req)
+	_, err := client.Do(req)
 	//resp, err := client.Do(req)
-	//checkForErrors(err)
+	checkForErrors(err)
 
 	//defer resp.Body.Close()
 
-	return resp
+	var blah *http.Response
+	return blah
 }
 
 func getFullAPIURL(port, etcdAPIPath string) string {
