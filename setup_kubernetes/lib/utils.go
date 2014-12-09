@@ -314,15 +314,15 @@ func createUnitFiles(fleetMachines *FleetMachines) {
 		"path":        path + "/roles",
 		"activeState": "active", "subState": "running"})
 
-	perm := os.FileMode(os.ModeDir)
-
 	/*
-		for _, v := range unitPathInfo {
-			err := os.RemoveAll(v["path"])
-			checkForErrors(err)
+		perm := os.FileMode(os.ModeDir)
 
-			os.MkdirAll(v["path"], perm)
-		}
+			for _, v := range unitPathInfo {
+				err := os.RemoveAll(v["path"])
+				checkForErrors(err)
+
+				os.MkdirAll(v["path"], perm)
+			}
 	*/
 
 	for _, fleetMachine := range *fleetMachines {
