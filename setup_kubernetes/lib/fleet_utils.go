@@ -97,10 +97,13 @@ func lowerCasingOfUnitOptionsStr(json_str string) string {
 }
 
 func getUnitPathInfo() []map[string]string {
+	templatePath := "/units/kubernetes_units"
 	unitPathInfo := []map[string]string{}
+
 	unitPathInfo = append(unitPathInfo, map[string]string{
 		"path":        templatePath + "/download",
 		"activeState": "active", "subState": "exited"})
+
 	unitPathInfo = append(unitPathInfo, map[string]string{
 		"path":        templatePath + "/roles",
 		"activeState": "active", "subState": "running"})
@@ -109,8 +112,6 @@ func getUnitPathInfo() []map[string]string {
 }
 
 func createUnitFiles(fleetMachine *FleetMachine) {
-	// Create all systemd unit files from templates
-	templatePath := "/units/kubernetes_units"
 	unitPathInfo := getUnitPathInfo()
 
 	switch fleetMachine.Metadata["kubernetes_role"] {
