@@ -122,7 +122,8 @@ func setMachinesDeployed(id string) {
 
 	switch id {
 	case "":
-		dataJSON := json.Marshal([]string)
+		var emptySlice []string
+		dataJSON := json.Marshal(emptySlice)
 		data = fmt.Sprintf("value=%s", dataJSON)
 	default:
 		machineIDs := getMachinesDeployed()
