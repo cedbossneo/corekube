@@ -140,7 +140,7 @@ func setMachinesDeployed(id string) {
 		data = fmt.Sprintf("value=%s", dataJSON)
 	default:
 		machinesDeployed := getMachinesDeployed()
-		machinesDeployed = append(machineDeployed, id)
+		machinesDeployed = append(machinesDeployed, id)
 		dataJSON, _ := json.Marshal(machinesDeployed)
 		data = fmt.Sprintf("value=%s", dataJSON)
 	}
