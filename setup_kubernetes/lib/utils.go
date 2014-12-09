@@ -100,7 +100,7 @@ func getFleetMachines(fleetResult *Result) {
 func getMachinesDeployed(machines *[]string) {
 	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
-	jsonResponse := httpGetRequest(url)
+	jsonResponse := httpGetRequest(urlStr)
 	err := json.Unmarshal(jsonResponse, &machines)
 }
 
@@ -109,7 +109,8 @@ func setMachinesDeployed(id string) {
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 
 	var machines []string
-	log.Printf("%s", getMachinesDeployed(&machines))
+	getMachinesDeployed(&machines)
+	log.Printf("%s", machines)
 
 	data := fmt.Sprintf("value='%s'", id)
 
