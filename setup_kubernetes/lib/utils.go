@@ -109,7 +109,7 @@ func getMachinesDeployed() []string {
 
 	var machinesDeployed []string
 	var machinesDeployedBytes []byte = []byte(machinesDeployedResult.Node.Value)
-	err = json.Unmarshal(machinesDeployedBytes, machinesDeployed)
+	err = json.Unmarshal(machinesDeployedBytes, &machinesDeployed)
 	checkForErrors(err)
 
 	return machinesDeployed
