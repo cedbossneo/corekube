@@ -316,12 +316,14 @@ func createUnitFiles(fleetMachines *FleetMachines) {
 
 	perm := os.FileMode(os.ModeDir)
 
-	for _, v := range unitPathInfo {
-		err := os.RemoveAll(v["path"])
-		checkForErrors(err)
+	/*
+		for _, v := range unitPathInfo {
+			err := os.RemoveAll(v["path"])
+			checkForErrors(err)
 
-		os.MkdirAll(v["path"], perm)
-	}
+			os.MkdirAll(v["path"], perm)
+		}
+	*/
 
 	for _, fleetMachine := range *fleetMachines {
 		switch fleetMachine.Metadata["kubernetes_role"] {
