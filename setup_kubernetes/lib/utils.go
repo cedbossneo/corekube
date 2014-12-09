@@ -103,7 +103,7 @@ func Run(fleetResult *Result) {
 	var fleetMachines FleetMachines
 
 	for {
-		log.Printf("Current number of machines found: (%d)", totalMachines)
+		log.Printf("Current number of machines found: (%d)\n", totalMachines)
 		time.Sleep(500 * time.Millisecond)
 
 		for _, resultNode := range fleetResult.Node.Nodes {
