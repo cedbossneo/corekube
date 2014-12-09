@@ -65,6 +65,8 @@ func httpPutRequest(
 		req.Header.Set("Content-Type", "application/json")
 	case false:
 		var dataURL = data.(url.Values)
+		log.Printf("%s", dataURL)
+		log.Printf("%s", bytes.NewBufferString(dataURL.Encode()))
 		req, _ := http.NewRequest(
 			"PUT", urlStr, bytes.NewBufferString(dataURL.Encode()))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
