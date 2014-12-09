@@ -171,6 +171,7 @@ func Run(fleetResult *Result) {
 			WaitForMetadata(&resultNode, &fleetMachine)
 
 			if !machineDeployed(fleetMachine.ID) {
+				log.Printf("Found undeployed machine:\n")
 				setMachinesDeployed(fleetMachine.ID)
 				fleetMachines = append(fleetMachines, fleetMachine)
 
