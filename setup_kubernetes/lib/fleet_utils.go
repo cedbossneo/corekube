@@ -96,6 +96,39 @@ func lowerCasingOfUnitOptionsStr(json_str string) string {
 	return json_str
 }
 
+func createUnitFiles(fleetMachine *FleetMachine) {
+	// Create all systemd unit files from templates
+	path := "/units/kubernetes_units"
+
+	// Start all systemd unit files in specified path via fleet
+	unitPathInfo := []map[string]string{}
+	unitPathInfo = append(unitPathInfo, map[string]string{
+		"path":        path + "/download",
+		"activeState": "active", "subState": "exited"})
+	unitPathInfo = append(unitPathInfo, map[string]string{
+		"path":        path + "/roles",
+		"activeState": "active", "subState": "running"})
+
+	/*
+		perm := os.FileMode(os.ModeDir)
+
+			for _, v := range unitPathInfo {
+				err := os.RemoveAll(v["path"])
+				checkForErrors(err)
+
+				os.MkdirAll(v["path"], perm)
+			}
+	*/
+
+	switch fleetMachine.Metadata["kubernetes_role"] {
+	case "master":
+		createMasterUnits(&fleetMachine, unitPathInfo)
+	case "minion":
+		createMinionUnits(&fleetMachine, unitPathInfo)
+	}
+	log.Printf("Created systemd unit files for: %s", fleetMachine.ID)
+}
+
 func StartUnitsInDir(path string) {
 	files, _ := ioutil.ReadDir(path)
 
