@@ -63,7 +63,7 @@ func httpPutRequest(
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(dataBytes))
 		req.Header.Set("Content-Type", "application/json")
 	case false:
-		var dataStr *String = data.(string)
+		var dataStr *string = data.(string)
 		log.Printf("%s", *dataStr)
 		log.Printf("%s", bytes.NewBufferString(*dataStr))
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataStr))
