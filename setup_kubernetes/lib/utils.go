@@ -66,8 +66,8 @@ func httpPutRequest(
 	case false:
 		//var dataStr = data.(string)
 		dataStr := url.Values{}
-		data.Set("value", "mike")
-		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(data.Encode()))
+		dataStr.Set("value", "mike")
+		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataStr.Encode()))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(dataStr)))
 	}
