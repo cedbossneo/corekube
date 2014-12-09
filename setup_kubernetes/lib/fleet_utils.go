@@ -109,17 +109,6 @@ func createUnitFiles(fleetMachine *FleetMachine) {
 		"path":        path + "/roles",
 		"activeState": "active", "subState": "running"})
 
-	/*
-		perm := os.FileMode(os.ModeDir)
-
-			for _, v := range unitPathInfo {
-				err := os.RemoveAll(v["path"])
-				checkForErrors(err)
-
-				os.MkdirAll(v["path"], perm)
-			}
-	*/
-
 	switch fleetMachine.Metadata["kubernetes_role"] {
 	case "master":
 		createMasterUnits(fleetMachine, unitPathInfo)
