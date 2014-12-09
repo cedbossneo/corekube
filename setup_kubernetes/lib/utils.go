@@ -118,9 +118,10 @@ func getMachinesDeployed() []string {
 func setMachinesDeployed(id string) {
 	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
+	data := ""
 
 	switch id {
-	case nil:
+	case "":
 		data := fmt.Sprintf("value=\"[]\"")
 	default:
 		machineIDs := getMachinesDeployed()
@@ -153,7 +154,7 @@ func Run(fleetResult *Result) {
 
 	getFleetMachines(fleetResult)
 	totalMachines := len(fleetResult.Node.Nodes)
-	setMachinesDeployed(nil)
+	setMachinesDeployed("")
 
 	// Get Fleet machines
 	//for {
