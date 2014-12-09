@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"os/exec"
 	"runtime"
@@ -65,9 +64,7 @@ func httpPutRequest(
 		req.Header.Set("Content-Type", "application/json")
 	case false:
 		//var dataStr = data.(string)
-		dataStr := url.Values{}
-		dataStr.Set("value", "mike")
-		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataStr.Encode()))
+		req, _ := http.NewRequest("PUT", urlStr, "value=mike")
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(dataStr)))
 	}
