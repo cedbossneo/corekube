@@ -94,13 +94,13 @@ func getFleetMachines(fleetResult *Result) {
 	checkForErrors(err)
 }
 
-func markMachineDeployed(id *string) {
+func markMachineDeployed(id string) {
 	urlStr := getFullAPIURL("4001", "v2/keys/deploy")
 	data := url.Values{}
 	data.Add("value", id)
 
 	resp := httpPutRequest(urlStr, data, false)
-	statusCode = resp.StatusCode
+	statusCode := resp.StatusCode
 }
 
 func Run(fleetResult *Result) {
