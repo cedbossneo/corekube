@@ -62,7 +62,6 @@ func httpPutRequest(
 		var dataBytes = data.([]byte)
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(dataBytes))
 		req.Header.Set("Content-Type", "application/json")
-		//	defer resp.Body.Close()
 	case false:
 		var dataStr = data.(string)
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataStr))
@@ -72,7 +71,9 @@ func httpPutRequest(
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	checkForErrors(err)
+	//checkForErrors(err)
+
+	//defer resp.Body.Close()
 
 	return resp
 }
