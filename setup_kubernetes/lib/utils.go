@@ -141,7 +141,7 @@ func setMachinesDeployed(id string) {
 		}
 	}
 
-	resp := httpPutRequest(urlStr, dataJSON, false)
+	resp := httpPutRequest(urlStr, data, false)
 	statusCode := resp.StatusCode
 
 	if statusCode != 200 {
