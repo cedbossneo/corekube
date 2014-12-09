@@ -152,7 +152,6 @@ func WaitForMetadata(
 	jsonResponse := httpGetRequest(url)
 
 	fmt.Printf("here2: %s -- %s", ETCD_CLIENT_PORT, ETCD_API_VERSION)
-	jsonResponse := httpGetRequest(url)
 	var nodeResult NodeResult
 	err := json.Unmarshal(jsonResponse, &nodeResult)
 	checkForErrors(err)
