@@ -67,6 +67,16 @@ type FleetUnitStates struct {
 	States []FleetUnitState
 }
 
+func (f FleetMachine) String() string {
+	output := fmt.Sprintf(
+		"\nMachine:\n-- ID: %s\n-- IP: %s\n-- Metadata: %s\n\n",
+		f.ID,
+		f.PublicIP,
+		f.Metadata.String(),
+	)
+	return output
+}
+
 func (m Map) String() string {
 	output := ""
 	for k, v := range m {

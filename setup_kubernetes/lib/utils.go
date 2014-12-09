@@ -112,14 +112,8 @@ func Run(fleetResult *Result) {
 			var fleetMachine FleetMachine
 			WaitForMetadata(&resultNode, &fleetMachine)
 
-			fleetMachines = append(
-				fleetMachines, fleetMachine)
-			log.Printf(
-				"\nFleet Machine:\n-- ID: %s\n-- PublicIP: %s\n-- Metadata: %s\n\n",
-				fleetMachine.ID,
-				fleetMachine.PublicIP,
-				fleetMachine.Metadata.String(),
-			)
+			fleetMachines = append(fleetMachines, fleetMachine)
+			log.Printf(fleetMachine.String())
 		}
 
 		getFleetMachines(fleetResult)
