@@ -122,9 +122,9 @@ func createUnitFiles(fleetMachine *FleetMachine) {
 
 	switch fleetMachine.Metadata["kubernetes_role"] {
 	case "master":
-		createMasterUnits(&fleetMachine, unitPathInfo)
+		createMasterUnits(fleetMachine, unitPathInfo)
 	case "minion":
-		createMinionUnits(&fleetMachine, unitPathInfo)
+		createMinionUnits(fleetMachine, unitPathInfo)
 	}
 	log.Printf("Created systemd unit files for: %s", fleetMachine.ID)
 }
