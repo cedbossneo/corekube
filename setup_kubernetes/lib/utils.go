@@ -95,41 +95,39 @@ func getFleetMachines(fleetResult *Result) {
 
 }
 
-func Wait(fleetResult *Result) {
+func Run(fleetResult *Result) {
 
 	getFleetMachines(fleetResult)
-	//totalMachines := len(fleetResult.Node.Nodes)
+	totalMachines := len(fleetResult.Node.Nodes)
 
 	var fleetMachines FleetMachines
 
-	//for {
-	//log.Printf("Current number of machines found: (%d)", totalMachines)
-	//time.Sleep(500 * time.Millisecond)
-	//---
+	for {
+		log.Printf("Current number of machines found: (%d)", totalMachines)
+		time.Sleep(500 * time.Millisecond)
 
-	for _, resultNode := range fleetResult.Node.Nodes {
+		for _, resultNode := range fleetResult.Node.Nodes {
 
-		// Get fleet metadata
-		var fleetMachine FleetMachine
-		WaitForFleetMachineMetadata(&resultNode, &fleetMachine)
+			// Get fleet metadata
+			var fleetMachine FleetMachine
+			WaitForMetadata(&resultNode, &fleetMachine)
 
-		fleetMachines = append(
-			fleetMachines, fleetMachine)
-		log.Printf(
-			"\nFleet Machine:\n-- ID: %s\n-- PublicIP: %s\n-- Metadata: %s\n\n",
-			fleetMachine.ID,
-			fleetMachine.PublicIP,
-			fleetMachine.Metadata.String(),
-		)
+			fleetMachines = append(
+				fleetMachines, fleetMachine)
+			log.Printf(
+				"\nFleet Machine:\n-- ID: %s\n-- PublicIP: %s\n-- Metadata: %s\n\n",
+				fleetMachine.ID,
+				fleetMachine.PublicIP,
+				fleetMachine.Metadata.String(),
+			)
+		}
+
+		getFleetMachines(fleetResult)
+		totalMachines = len(fleetResult.Node.Nodes)
 	}
-
-	//---
-	//getFleetMachines(fleetResult)
-	//totalMachines = len(fleetResult.Node.Nodes)
-	//}
 }
 
-func WaitForFleetMachineMetadata(
+func WaitForMetadata(
 	resultNode *ResultNode,
 	fleetMachine *FleetMachine,
 ) {
@@ -153,7 +151,7 @@ func WaitForFleetMachineMetadata(
 		fleetMachine.Metadata["kubernetes_role"] == nil {
 		log.Printf("Waiting for machine (%s) metadata to be available "+
 			"in fleet...", fleetMachine.ID)
-		time.Sleep(1 * time.Second)
+		time.Sleep(500 * time.Millisecond)
 
 		err = json.Unmarshal(
 			[]byte(nodeResult.Node.Value), &fleetMachine)
