@@ -6,7 +6,7 @@ import "setup_kubernetes/lib"
 func main() {
 	// Get fleet machines & metadata
 	var fleetResult lib.Result
-	lib.Wait(&fleetResult)
+	lib.Run(&fleetResult)
 
 	/*
 		// Create all systemd unit files from templates
