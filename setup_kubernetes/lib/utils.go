@@ -115,44 +115,42 @@ func getMachinesDeployed() []string {
 	return machinesDeployed
 }
 
+func machineDeployed(id string) bool {
+	deployed := false
+	machineIDs := getMachinesDeployed()
+
+	for _, machineID := range machineIDs {
+		if machineID == id {
+			deployed = true
+		}
+	}
+
+	return deployed
+}
+
 func setMachinesDeployed(id string) {
 	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 	data := ""
-	deployed := false
 
 	switch id {
 	case "":
 		emptySlice := []string{}
 		dataJSON, _ := json.Marshal(emptySlice)
 		data = fmt.Sprintf("value=%s", dataJSON)
-		log.Printf("here0")
 	default:
-		machineIDs := getMachinesDeployed()
-
-		for _, machineID := range machineIDs {
-			if machineID == id {
-				deployed = true
-			}
-		}
-
-		if !deployed {
-			log.Printf("here1")
-			machineIDs = append(machineIDs, id)
-			dataJSON, _ := json.Marshal(machineIDs)
-			data = fmt.Sprintf("value=%s", dataJSON)
-		}
+		machinesDeployed := getMachinesDeployed()
+		machinesDeployed = append(machineDeployed, id)
+		dataJSON, _ := json.Marshal(machinesDeployed)
+		data = fmt.Sprintf("value=%s", dataJSON)
 	}
 
-	if !deployed {
-		log.Printf("here2")
-		resp := httpPutRequest(urlStr, data, false)
-		statusCode := resp.StatusCode
+	resp := httpPutRequest(urlStr, data, false)
+	statusCode := resp.StatusCode
 
-		if statusCode != 200 {
-			time.Sleep(1 * time.Second)
-			setMachinesDeployed(id)
-		}
+	if statusCode != 200 {
+		time.Sleep(1 * time.Second)
+		setMachinesDeployed(id)
 	}
 
 }
@@ -165,23 +163,28 @@ func Run(fleetResult *Result) {
 	setMachinesDeployed("")
 
 	// Get Fleet machines
-	//for {
-	log.Printf("Current number of machines found: (%d)\n", totalMachines)
-	// Get Fleet machines metadata
-	for _, resultNode := range fleetResult.Node.Nodes {
-		var fleetMachine FleetMachine
-		WaitForMetadata(&resultNode, &fleetMachine)
-		log.Printf("------------------------------------------------")
-		log.Printf(fleetMachine.String())
-		setMachinesDeployed(fleetMachine.ID)
-		createUnitFiles(&fleetMachine)
-		fleetMachines = append(fleetMachines, fleetMachine)
-	}
+	for {
+		log.Printf("Current number of machines found: (%d)\n", totalMachines)
+		// Get Fleet machines metadata
+		for _, resultNode := range fleetResult.Node.Nodes {
+			var fleetMachine FleetMachine
+			WaitForMetadata(&resultNode, &fleetMachine)
 
-	time.Sleep(500 * time.Millisecond)
-	getFleetMachines(fleetResult)
-	totalMachines = len(fleetResult.Node.Nodes)
-	//}
+			if !machineDeployed(fleetMachine.ID) {
+				setMachinesDeployed(fleetMachine.ID)
+				fleetMachines = append(fleetMachines, fleetMachine)
+
+				log.Printf("------------------------------------------------")
+				log.Printf(fleetMachine.String())
+
+				createUnitFiles(&fleetMachine)
+			}
+		}
+
+		time.Sleep(500 * time.Millisecond)
+		getFleetMachines(fleetResult)
+		totalMachines = len(fleetResult.Node.Nodes)
+	}
 }
 
 func WaitForMetadata(
