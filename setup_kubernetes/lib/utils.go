@@ -64,7 +64,7 @@ func httpPutRequest(
 		req.Header.Set("Content-Type", "application/json")
 	case false:
 		var dataStr = data.(string)
-		fmt.Println("%s -- %s", urlStr, bytes.NewBufferString(dataStr))
+		fmt.Printf("%s -- %s\n", urlStr, bytes.NewBufferString(dataStr))
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataStr))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(dataStr)))
@@ -95,7 +95,7 @@ func getFleetMachines(fleetResult *Result) {
 
 func markMachineDeployed(id string) {
 	urlStr := getFullAPIURL("4001", "v2/keys/deploy")
-	data := fmt.Sprintf("value=%s", id)
+	data := fmt.Sprintf("value='%s'", id)
 
 	resp := httpPutRequest(urlStr, data, false)
 	statusCode := resp.StatusCode
