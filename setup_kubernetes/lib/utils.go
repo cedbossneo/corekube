@@ -99,7 +99,11 @@ func markMachineDeployed(id string) {
 
 	resp := httpPutRequest(urlStr, data, false)
 	statusCode := resp.StatusCode
-	log.Printf("Status: %d", statusCode)
+	if statusCode != 200 {
+		time.Sleep(1 * time.Second)
+		markMachineDeployed(id)
+	}
+
 }
 
 func Run(fleetResult *Result) {
