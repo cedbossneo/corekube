@@ -16,6 +16,9 @@ import (
 	"time"
 )
 
+var ETCD_API_VERSION string = "v2"
+var ETCD_CLIENT_PORT string = "4001"
+
 // Check for errors and panic, if found
 func checkForErrors(err error) {
 	if err != nil {
@@ -87,14 +90,16 @@ func getFullAPIURL(port, etcdAPIPath string) string {
 
 func getFleetMachines(fleetResult *Result) {
 	// Issue request to get machines & parse it. Sleep if cluster not ready yet
-	url := getFullAPIURL("4001", "v2/keys/_coreos.com/fleet/machines")
+	path := fmt.Sprintf("%s/keys/_coreos.com/fleet/machines", ETCD_API_VERSION)
+	url := getFullAPIURL(ETCD_CLIENT_PORT, path)
 	jsonResponse := httpGetRequest(url)
 	err := json.Unmarshal(jsonResponse, fleetResult)
 	checkForErrors(err)
 }
 
 func markMachineDeployed(id string) {
-	urlStr := getFullAPIURL("4001", "v2/keys/deploy")
+	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
+	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 	data := fmt.Sprintf("value='%s'", id)
 
 	resp := httpPutRequest(urlStr, data, false)
@@ -138,9 +143,10 @@ func WaitForMetadata(
 
 	// Issue request to get machines & parse it. Sleep if cluster not ready yet
 	id := strings.Split(resultNode.Key, "fleet/machines/")[1]
-	path := fmt.Sprintf("v2/keys/_coreos.com/fleet/machines/%s/object", id)
+	path := fmt.Sprintf(
+		"%s/keys/_coreos.com/fleet/machines/%s/object", ETCD_API_VERSION, id)
 
-	url := getFullAPIURL("4001", path)
+	url := getFullAPIURL(ETCD_CLIENT_PORT, path)
 	jsonResponse := httpGetRequest(url)
 
 	var nodeResult NodeResult

@@ -12,6 +12,9 @@ import (
 	"github.com/coreos/fleet/unit"
 )
 
+var FLEET_API_VERSION string = "v1-alpha"
+var FLEET_API_PORT string = "10001"
+
 // Types Result, ResultNode, NodeResult & Node adapted from:
 // https://github.com/coreos/fleet/blob/master/etcd/result.go
 
@@ -99,8 +102,8 @@ func StartUnitsInDir(path string) {
 	for _, f := range files {
 		statusCode := 0
 		for statusCode != 204 {
-			unitpath := fmt.Sprintf("v1-alpha/units/%s", f.Name())
-			url := getFullAPIURL("10001", unitpath)
+			unitpath := fmt.Sprintf("%s/units/%s", FLEET_API_VERSION, f.Name())
+			url := getFullAPIURL(FLEET_API_PORT, unitpath)
 			filepath := fmt.Sprintf("%s/%s", path, f.Name())
 
 			readfile, err := ioutil.ReadFile(filepath)
@@ -145,7 +148,8 @@ func CheckUnitsState(path, activeState, subState string) {
 
 	var fleetUnitStates FleetUnitStates
 
-	url := getFullAPIURL("10001", "v1-alpha/state")
+	path := fmt.Sprintf("%s/state", FLEET_API_VERSION)
+	url := getFullAPIURL(FLEET_API_PORT, path)
 	jsonResponse := httpGetRequest(url)
 	err := json.Unmarshal(jsonResponse, &fleetUnitStates)
 	checkForErrors(err)
