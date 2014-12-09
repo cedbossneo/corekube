@@ -122,7 +122,7 @@ func setMachinesDeployed(id string) {
 
 	switch id {
 	case "":
-		data = fmt.Sprintf("value=\"[]\"")
+		data = fmt.Sprintf("value=[]")
 	default:
 		machineIDs := getMachinesDeployed()
 		deployed := false
