@@ -105,11 +105,10 @@ func StartUnitsInDir(path string) {
 			unitpath := fmt.Sprintf("%s/units/%s", FLEET_API_VERSION, f.Name())
 			url := getFullAPIURL(FLEET_API_PORT, unitpath)
 			filepath := fmt.Sprintf("%s/%s", path, f.Name())
-
 			readfile, err := ioutil.ReadFile(filepath)
 			checkForErrors(err)
-			content := string(readfile)
 
+			content := string(readfile)
 			u, _ := unit.NewUnitFile(content)
 
 			options_bytes, _ := json.Marshal(u.Options)

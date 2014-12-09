@@ -125,7 +125,7 @@ func Run(fleetResult *Result) {
 		var fleetMachine FleetMachine
 		WaitForMetadata(&resultNode, &fleetMachine)
 		markMachineDeployed(fleetMachine.ID)
-
+		createUnitFiles(&fleetMachines)
 		fleetMachines = append(fleetMachines, fleetMachine)
 		log.Printf(fleetMachine.String())
 	}
@@ -301,10 +301,18 @@ func FindInfoForRole(
 	return machines
 }
 
-func CreateUnitFiles(
-	fleetMachines *[]FleetMachine,
-	unitPathInfo []map[string]string,
-) {
+func createUnitFiles(fleetMachines *FleetMachines) {
+	// Create all systemd unit files from templates
+	path := "/units/kubernetes_units"
+
+	// Start all systemd unit files in specified path via fleet
+	unitPathInfo := []map[string]string{}
+	unitPathInfo = append(unitPathInfo, map[string]string{
+		"path":        path + "/download",
+		"activeState": "active", "subState": "exited"})
+	unitPathInfo = append(unitPathInfo, map[string]string{
+		"path":        path + "/roles",
+		"activeState": "active", "subState": "running"})
 
 	perm := os.FileMode(os.ModeDir)
 
