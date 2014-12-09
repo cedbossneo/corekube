@@ -107,7 +107,11 @@ func getMachinesDeployed() []string {
 	err := json.Unmarshal(jsonResponse, &machinesDeployedResult)
 	checkForErrors(err)
 
-	var machinesDeployed []string = []string(machinesDeployedResult.Node.Value)
+	var machinesDeployed []string
+	var machinesDeployedBytes []byte = []byte(machinesDeployedResult.Node.Value)
+	err = json.Unmarshal(machinesDeployedBytes, machinesDeployed)
+	checkForErrors(err)
+
 	return machinesDeployed
 }
 
