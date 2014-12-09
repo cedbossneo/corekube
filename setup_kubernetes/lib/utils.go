@@ -108,7 +108,7 @@ func getMachinesDeployed() []string {
 	checkForErrors(err)
 
 	var machinesDeployed []string
-	err := json.Unmarshal(result.Node.Value, machinesDeployed)
+	err := json.Unmarshal(machinesDeployedResult.Node.Value, machinesDeployed)
 	checkForErrors(err)
 
 	return machinesDeployed
@@ -118,7 +118,6 @@ func setMachinesDeployed(id string) {
 	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 
-	getMachinesDeployed(&machineIDs)
 	log.Printf("%s", getMachinesDeployed())
 
 	data := fmt.Sprintf("value='%s'", id)
