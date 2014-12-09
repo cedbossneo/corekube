@@ -98,7 +98,7 @@ func getFleetMachines(fleetResult *Result) {
 }
 
 func markMachineDeployed(id string) {
-	path := fmt.Sprintf("%s/keys/deploy", ETCD_API_VERSION)
+	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 	data := fmt.Sprintf("value='%s'", id)
 
