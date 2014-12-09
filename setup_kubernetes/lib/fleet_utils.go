@@ -72,7 +72,7 @@ type FleetUnitStates struct {
 
 func (f FleetMachine) String() string {
 	output := fmt.Sprintf(
-		"\nMachine:\n-- ID: %s\n-- IP: %s\n-- Metadata: %s\n\n",
+		"\nMachine:\n-- ID: %s\n-- IP: %s\n-- Metadata: %s\n",
 		f.ID,
 		f.PublicIP,
 		f.Metadata.String(),
@@ -126,7 +126,7 @@ func createUnitFiles(fleetMachine *FleetMachine) {
 	case "minion":
 		createMinionUnits(fleetMachine, unitPathInfo)
 	}
-	log.Printf("Created unit files for: %s", fleetMachine.ID)
+	log.Printf("Created unit files for: %s\n", fleetMachine.ID)
 }
 
 func StartUnitsInDir(path string) {
