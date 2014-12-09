@@ -94,6 +94,15 @@ func getFleetMachines(fleetResult *Result) {
 	checkForErrors(err)
 }
 
+func markMachineDeployed(id *string) {
+	urlStr := getFullAPIURL("4001", "v2/keys/deploy")
+	data := url.Values{}
+	data.Add("value", id)
+
+	resp := httpPutRequest(urlStr, data, false)
+	statusCode = resp.StatusCode
+}
+
 func Run(fleetResult *Result) {
 	var fleetMachines FleetMachines
 
@@ -101,21 +110,22 @@ func Run(fleetResult *Result) {
 	totalMachines := len(fleetResult.Node.Nodes)
 
 	// Get Fleet machines
-	for {
-		log.Printf("Current number of machines found: (%d)\n", totalMachines)
-		// Get Fleet machines metadata
-		for _, resultNode := range fleetResult.Node.Nodes {
-			var fleetMachine FleetMachine
-			WaitForMetadata(&resultNode, &fleetMachine)
+	//for {
+	log.Printf("Current number of machines found: (%d)\n", totalMachines)
+	// Get Fleet machines metadata
+	for _, resultNode := range fleetResult.Node.Nodes {
+		var fleetMachine FleetMachine
+		markMachineDeployed(fleetMachine.ID)
+		WaitForMetadata(&resultNode, &fleetMachine)
 
-			fleetMachines = append(fleetMachines, fleetMachine)
-			log.Printf(fleetMachine.String())
-		}
-
-		time.Sleep(500 * time.Millisecond)
-		getFleetMachines(fleetResult)
-		totalMachines = len(fleetResult.Node.Nodes)
+		fleetMachines = append(fleetMachines, fleetMachine)
+		log.Printf(fleetMachine.String())
 	}
+
+	time.Sleep(500 * time.Millisecond)
+	getFleetMachines(fleetResult)
+	totalMachines = len(fleetResult.Node.Nodes)
+	//}
 }
 
 func WaitForMetadata(
