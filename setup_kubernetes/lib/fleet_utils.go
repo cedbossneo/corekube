@@ -72,7 +72,7 @@ type FleetUnitStates struct {
 
 func (f FleetMachine) String() string {
 	output := fmt.Sprintf(
-		"\n\t\tMachine:\n-- ID: %s\n\t\t-- IP: %s\n\t\t-- Metadata: %s\n",
+		"Machine:\n\t\t-- ID: %s\n\t\t-- IP: %s\n\t\t-- Metadata: %s\n",
 		f.ID,
 		f.PublicIP,
 		f.Metadata.String(),
