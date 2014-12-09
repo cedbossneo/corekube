@@ -69,7 +69,7 @@ func httpPutRequest(
 		req, _ := http.NewRequest(
 			"PUT", urlStr, bytes.NewBufferString(dataStr))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-		req.Header.Add("Content-Length", strconv.Itoa(len(dataStr.Encode())))
+		req.Header.Add("Content-Length", strconv.Itoa(len(dataStr)))
 	}
 
 	client := &http.Client{}
