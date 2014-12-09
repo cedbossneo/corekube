@@ -126,7 +126,7 @@ func createUnitFiles(fleetMachine *FleetMachine) {
 	case "minion":
 		createMinionUnits(fleetMachine, unitPathInfo)
 	}
-	log.Printf("Created systemd unit files for: %s", fleetMachine.ID)
+	log.Printf("Created unit files for: %s", fleetMachine.ID)
 }
 
 func StartUnitsInDir(path string) {
