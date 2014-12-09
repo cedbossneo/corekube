@@ -100,7 +100,7 @@ func markMachineDeployed(id string) {
 	data.Add("value", id)
 
 	resp := httpPutRequest(urlStr, data, false)
-	statusCode := resp.StatusCode
+	//statusCode := resp.StatusCode
 }
 
 func Run(fleetResult *Result) {
