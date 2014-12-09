@@ -97,16 +97,28 @@ func getFleetMachines(fleetResult *Result) {
 	checkForErrors(err)
 }
 
-func markMachineDeployed(id string) {
+func getMachinesDeployed(machines *[]string) {
 	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
+	jsonResponse := httpGetRequest(url)
+	err := json.Unmarshal(jsonResponse, &machines)
+}
+
+func setMachinesDeployed(id string) {
+	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
+	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
+
+	var machines []string
+	log.Printf("%s", getMachinesDeployed(&machines))
+
 	data := fmt.Sprintf("value='%s'", id)
 
 	resp := httpPutRequest(urlStr, data, false)
 	statusCode := resp.StatusCode
+
 	if statusCode != 200 {
 		time.Sleep(1 * time.Second)
-		markMachineDeployed(id)
+		setMachinesDeployed(id)
 	}
 
 }
@@ -126,7 +138,7 @@ func Run(fleetResult *Result) {
 		WaitForMetadata(&resultNode, &fleetMachine)
 		log.Printf("------------------------------------------------")
 		log.Printf(fleetMachine.String())
-		markMachineDeployed(fleetMachine.ID)
+		setMachinesDeployed(fleetMachine.ID)
 		createUnitFiles(&fleetMachine)
 		fleetMachines = append(fleetMachines, fleetMachine)
 	}
