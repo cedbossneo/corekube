@@ -69,14 +69,12 @@ func httpPutRequest(
 	}
 
 	client := &http.Client{}
-	_, err := client.Do(req)
-	//resp, err := client.Do(req)
+	resp, err := client.Do(req)
 	checkForErrors(err)
 
-	//defer resp.Body.Close()
+	defer resp.Body.Close()
 
-	var blah *http.Response
-	return blah
+	return resp
 }
 
 func getFullAPIURL(port, etcdAPIPath string) string {
@@ -97,9 +95,10 @@ func markMachineDeployed(id string) {
 	urlStr := getFullAPIURL("4001", "v2/keys/deploy")
 	data := fmt.Sprintf("value='%s'", id)
 
-	resp := httpPutRequest(urlStr, data, false)
-	statusCode := resp.StatusCode
-	log.Printf("Status: %d", statusCode)
+	//resp := httpPutRequest(urlStr, data, false)
+	httpPutRequest(urlStr, data, false)
+	//statusCode := resp.StatusCode
+	//log.Printf("Status: %d", statusCode)
 }
 
 func Run(fleetResult *Result) {
