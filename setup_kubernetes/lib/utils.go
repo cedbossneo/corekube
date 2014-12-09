@@ -64,10 +64,10 @@ func httpPutRequest(
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(dataBytes))
 		req.Header.Set("Content-Type", "application/json")
 	case false:
-		var dataStr = data.(string)
-		dataStr = url.QueryEscape(dataStr)
-		fmt.Printf("%s -- %s\n", urlStr, bytes.NewBufferString(dataStr))
-		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataStr))
+		//var dataStr = data.(string)
+		dataStr := url.Values{}
+		data.Set("value", "mike")
+		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(data.Encode()))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(dataStr)))
 	}
