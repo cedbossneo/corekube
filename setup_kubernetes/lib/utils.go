@@ -70,7 +70,7 @@ func httpPutRequest(
 	}
 
 	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, _ := client.Do(req)
 	//checkForErrors(err)
 
 	//defer resp.Body.Close()
