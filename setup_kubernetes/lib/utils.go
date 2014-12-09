@@ -119,8 +119,6 @@ func setMachinesDeployed(id string) {
 	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 
-	log.Printf("%s", getMachinesDeployed())
-
 	data := fmt.Sprintf("value='%s'", id)
 
 	resp := httpPutRequest(urlStr, data, false)
@@ -147,6 +145,7 @@ func Run(fleetResult *Result) {
 		var fleetMachine FleetMachine
 		WaitForMetadata(&resultNode, &fleetMachine)
 		log.Printf("------------------------------------------------")
+		log.Printf("%s", getMachinesDeployed())
 		log.Printf(fleetMachine.String())
 		//setMachinesDeployed(fleetMachine.ID)
 		createUnitFiles(&fleetMachine)
