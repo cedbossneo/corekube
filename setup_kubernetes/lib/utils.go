@@ -11,7 +11,6 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -64,9 +63,9 @@ func httpPutRequest(
 		req.Header.Set("Content-Type", "application/json")
 	case false:
 		//var dataStr = data.(string)
-		req, _ := http.NewRequest("PUT", urlStr, "value=mike")
+		req, _ := http.NewRequest("PUT", urlStr, strings.NewReader("value=mike"))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-		req.Header.Add("Content-Length", strconv.Itoa(len(dataStr)))
+		//req.Header.Add("Content-Length", strconv.Itoa(len(dataStr)))
 	}
 
 	client := &http.Client{}
