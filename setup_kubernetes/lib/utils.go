@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"os/exec"
 	"runtime"
@@ -64,13 +63,13 @@ func httpPutRequest(
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(dataBytes))
 		req.Header.Set("Content-Type", "application/json")
 	case false:
-		var dataURL = data.(url.Values)
-		log.Printf("%s", dataURL)
-		log.Printf("%s", bytes.NewBufferString(dataURL.Encode()))
+		var dataStr = data.(string)
+		log.Printf("%s", dataStr)
+		log.Printf("%s", bytes.NewBufferString(dataStr.Encode()))
 		req, _ := http.NewRequest(
-			"PUT", urlStr, bytes.NewBufferString(dataURL.Encode()))
+			"PUT", urlStr, bytes.NewBufferString(dataStr.Encode()))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-		req.Header.Add("Content-Length", strconv.Itoa(len(dataURL.Encode())))
+		req.Header.Add("Content-Length", strconv.Itoa(len(dataStr.Encode())))
 	}
 
 	client := &http.Client{}
@@ -98,8 +97,7 @@ func getFleetMachines(fleetResult *Result) {
 
 func markMachineDeployed(id string) {
 	urlStr := getFullAPIURL("4001", "v2/keys/deploy")
-	data := url.Values{}
-	data.Add("value", id)
+	data := fmt.Sprintf("value=%s", id)
 
 	resp := httpPutRequest(urlStr, data, false)
 	statusCode := resp.StatusCode
