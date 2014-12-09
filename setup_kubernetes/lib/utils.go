@@ -164,23 +164,26 @@ func Run(fleetResult *Result) {
 
 	// Get Fleet machines
 	for {
-		log.Printf("Current number of machines found: (%d)\n", totalMachines)
+		log.Printf("Current # of machines discovered: (%d)\n", totalMachines)
 		// Get Fleet machines metadata
 		for _, resultNode := range fleetResult.Node.Nodes {
 			var fleetMachine FleetMachine
 			WaitForMetadata(&resultNode, &fleetMachine)
 
 			if !machineDeployed(fleetMachine.ID) {
+				log.Printf("------------------------------------------------")
 				log.Printf("Found undeployed machine:\n")
+				log.Printf(fleetMachine.String())
+
 				setMachinesDeployed(fleetMachine.ID)
 				fleetMachines = append(fleetMachines, fleetMachine)
-
-				log.Printf("------------------------------------------------")
-				log.Printf(fleetMachine.String())
 
 				createUnitFiles(&fleetMachine)
 			}
 		}
+
+		// TODO start unit files
+		// TODO register minions with k8s api server
 
 		time.Sleep(500 * time.Millisecond)
 		getFleetMachines(fleetResult)
