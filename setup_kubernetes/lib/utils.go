@@ -119,15 +119,16 @@ func setMachinesDeployed(id string) {
 	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 	data := ""
+	deployed := false
 
 	switch id {
 	case "":
 		emptySlice := []string{}
 		dataJSON, _ := json.Marshal(emptySlice)
 		data = fmt.Sprintf("value=%s", dataJSON)
+		log.Printf("here0")
 	default:
 		machineIDs := getMachinesDeployed()
-		deployed := false
 
 		for _, machineID := range machineIDs {
 			if machineID == id {
@@ -136,18 +137,22 @@ func setMachinesDeployed(id string) {
 		}
 
 		if !deployed {
+			log.Printf("here1")
 			machineIDs = append(machineIDs, id)
 			dataJSON, _ := json.Marshal(machineIDs)
 			data = fmt.Sprintf("value=%s", dataJSON)
 		}
 	}
 
-	resp := httpPutRequest(urlStr, data, false)
-	statusCode := resp.StatusCode
+	if !deployed {
+		log.Printf("here2")
+		resp := httpPutRequest(urlStr, data, false)
+		statusCode := resp.StatusCode
 
-	if statusCode != 200 {
-		time.Sleep(1 * time.Second)
-		setMachinesDeployed(id)
+		if statusCode != 200 {
+			time.Sleep(1 * time.Second)
+			setMachinesDeployed(id)
+		}
 	}
 
 }
