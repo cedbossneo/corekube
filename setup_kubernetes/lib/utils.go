@@ -135,7 +135,7 @@ func setMachinesDeployed(id string) {
 
 		if !deployed {
 			machineIDs = append(machineIDs, id)
-			data = fmt.Sprintf("value=\"%s\"", machineIDs)
+			data = fmt.Sprintf("value=%s", machineIDs)
 		}
 	}
 
