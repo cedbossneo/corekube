@@ -9,20 +9,6 @@ func main() {
 	lib.Run(&fleetResult)
 
 	/*
-		// Create all systemd unit files from templates
-		path := "/units/kubernetes_units"
-
-		// Start all systemd unit files in specified path via fleet
-		unitPathInfo := []map[string]string{}
-		unitPathInfo = append(unitPathInfo, map[string]string{
-			"path":        path + "/download",
-			"activeState": "active", "subState": "exited"})
-		unitPathInfo = append(unitPathInfo, map[string]string{
-			"path":        path + "/roles",
-			"activeState": "active", "subState": "running"})
-
-		lib.CreateUnitFiles(&fleetMachines, unitPathInfo)
-
 		// Start & check state for download & role units
 		for _, v := range unitPathInfo {
 			lib.StartUnitsInDir(v["path"])
