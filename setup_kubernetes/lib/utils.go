@@ -116,28 +116,34 @@ func getMachinesDeployed() []string {
 }
 
 func setMachinesDeployed(id string) {
-	machineIDs := getMachinesDeployed()
+	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
+	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 
-	deployed := false
-	for _, machineID := range machineIDs {
-		if machineID == id {
-			deployed = true
+	switch id {
+	case nil:
+		data := fmt.Sprintf("value=\"[]\"")
+	default:
+		machineIDs := getMachinesDeployed()
+		deployed := false
+
+		for _, machineID := range machineIDs {
+			if machineID == id {
+				deployed = true
+			}
+		}
+
+		if !deployed {
+			machineIDs = append(machineIDs, id)
+			data := fmt.Sprintf("value=\"%s\"", machineIDs)
 		}
 	}
 
-	if !deployed {
-		path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
-		urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
+	resp := httpPutRequest(urlStr, data, false)
+	statusCode := resp.StatusCode
 
-		data := fmt.Sprintf("value='%s'", id)
-
-		resp := httpPutRequest(urlStr, data, false)
-		statusCode := resp.StatusCode
-
-		if statusCode != 200 {
-			time.Sleep(1 * time.Second)
-			setMachinesDeployed(id)
-		}
+	if statusCode != 200 {
+		time.Sleep(1 * time.Second)
+		setMachinesDeployed(id)
 	}
 
 }
@@ -147,6 +153,7 @@ func Run(fleetResult *Result) {
 
 	getFleetMachines(fleetResult)
 	totalMachines := len(fleetResult.Node.Nodes)
+	setMachinesDeployed(nil)
 
 	// Get Fleet machines
 	//for {
@@ -157,7 +164,7 @@ func Run(fleetResult *Result) {
 		WaitForMetadata(&resultNode, &fleetMachine)
 		log.Printf("------------------------------------------------")
 		log.Printf(fleetMachine.String())
-		setMachinesDeployed(fleetMachine.ID)
+		//setMachinesDeployed(fleetMachine.ID)
 		createUnitFiles(&fleetMachine)
 		fleetMachines = append(fleetMachines, fleetMachine)
 	}
