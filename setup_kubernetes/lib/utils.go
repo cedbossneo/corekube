@@ -143,12 +143,16 @@ func WaitForMetadata(
 
 	// Issue request to get machines & parse it. Sleep if cluster not ready yet
 	id := strings.Split(resultNode.Key, "fleet/machines/")[1]
+	fmt.Printf("here0: %s -- %s", ETCD_CLIENT_PORT, ETCD_API_VERSION)
 	path := fmt.Sprintf(
 		"%s/keys/_coreos.com/fleet/machines/%s/object", ETCD_API_VERSION, id)
 
 	url := getFullAPIURL(ETCD_CLIENT_PORT, path)
+	fmt.Printf("here1: %s -- %s", ETCD_CLIENT_PORT, ETCD_API_VERSION)
 	jsonResponse := httpGetRequest(url)
 
+	fmt.Printf("here2: %s -- %s", ETCD_CLIENT_PORT, ETCD_API_VERSION)
+	jsonResponse := httpGetRequest(url)
 	var nodeResult NodeResult
 	err := json.Unmarshal(jsonResponse, &nodeResult)
 	checkForErrors(err)
@@ -286,21 +290,6 @@ func createMinionUnits(fleetMachine *FleetMachine,
 	err = ioutil.WriteFile(download_file, []byte(download), 0644)
 	checkForErrors(err)
 }
-
-//func getMinionIPAddrs(
-//	fleetMachines *[]FleetMachine) string {
-//	output := ""
-//
-//	for _, fleetMachine := range *fleetMachines {
-//		switch fleetMachine.Metadata["kubernetes_role"] {
-//		case "minion":
-//			output += fleetMachine.PublicIP + ","
-//		}
-//	}
-//
-//	k := strings.LastIndex(output, ",")
-//	return output[:k]
-//}
 
 func FindInfoForRole(
 	role string,
