@@ -122,7 +122,8 @@ func setMachinesDeployed(id string) {
 
 	switch id {
 	case "":
-		data = fmt.Sprintf("value=[]")
+		dataJSON := json.Marshal([]string)
+		data = fmt.Sprintf("value=%s", dataJSON)
 	default:
 		machineIDs := getMachinesDeployed()
 		deployed := false
@@ -139,7 +140,7 @@ func setMachinesDeployed(id string) {
 		}
 	}
 
-	resp := httpPutRequest(urlStr, data, false)
+	resp := httpPutRequest(urlStr, dataJSON, false)
 	statusCode := resp.StatusCode
 
 	if statusCode != 200 {
@@ -165,7 +166,7 @@ func Run(fleetResult *Result) {
 		WaitForMetadata(&resultNode, &fleetMachine)
 		log.Printf("------------------------------------------------")
 		log.Printf(fleetMachine.String())
-		setMachinesDeployed(fleetMachine.ID)
+		//setMachinesDeployed(fleetMachine.ID)
 		createUnitFiles(&fleetMachine)
 		fleetMachines = append(fleetMachines, fleetMachine)
 	}
