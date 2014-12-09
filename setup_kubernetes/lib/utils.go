@@ -62,19 +62,17 @@ func httpPutRequest(
 		var dataBytes = data.([]byte)
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(dataBytes))
 		req.Header.Set("Content-Type", "application/json")
+		//	defer resp.Body.Close()
 	case false:
 		var dataStr = data.(string)
-		log.Printf("%s", dataStr)
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataStr))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(dataStr)))
 	}
 
 	client := &http.Client{}
-	resp, _ := client.Do(req)
-	//checkForErrors(err)
-
-	defer resp.Body.Close()
+	resp, err := client.Do(req)
+	checkForErrors(err)
 
 	return resp
 }
