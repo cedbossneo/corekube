@@ -122,7 +122,7 @@ func setMachinesDeployed(id string) {
 
 	switch id {
 	case "":
-		var emptySlice []string
+		emptySlice := []string{}
 		dataJSON := json.Marshal(emptySlice)
 		data = fmt.Sprintf("value=%s", dataJSON)
 	default:
