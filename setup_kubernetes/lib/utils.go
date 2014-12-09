@@ -137,7 +137,8 @@ func setMachinesDeployed(id string) {
 
 		if !deployed {
 			machineIDs = append(machineIDs, id)
-			data = fmt.Sprintf("value=%s", machineIDs)
+			dataJSON, _ := json.Marshal(machineIDs)
+			data = fmt.Sprintf("value=%s", dataJSON)
 		}
 	}
 
