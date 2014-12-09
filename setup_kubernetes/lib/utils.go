@@ -97,11 +97,11 @@ func getFleetMachines(fleetResult *Result) {
 	checkForErrors(err)
 }
 
-func getMachinesDeployed(machines *[]string) {
+func getMachinesDeployed(result *NodeResult) {
 	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 	jsonResponse := httpGetRequest(urlStr)
-	err := json.Unmarshal(jsonResponse, &machines)
+	err := json.Unmarshal(jsonResponse, &result)
 	checkForErrors(err)
 }
 
@@ -109,9 +109,9 @@ func setMachinesDeployed(id string) {
 	path := fmt.Sprintf("%s/keys/deployed", ETCD_API_VERSION)
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 
-	var machines []string
-	getMachinesDeployed(&machines)
-	log.Printf("%s", machines)
+	var machineIDs NodeResult
+	getMachinesDeployed(&machineIDs)
+	log.Printf("%s", machineIDs.Node.Value)
 
 	data := fmt.Sprintf("value='%s'", id)
 
