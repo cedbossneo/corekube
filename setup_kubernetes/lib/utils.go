@@ -63,7 +63,7 @@ func httpPutRequest(
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBuffer(dataBytes))
 		req.Header.Set("Content-Type", "application/json")
 	case false:
-		var dataStr = data.(string)
+		var dataStr = url.QueryEsacpe(data.(string))
 		fmt.Printf("%s -- %s\n", urlStr, bytes.NewBufferString(dataStr))
 		req, _ := http.NewRequest("PUT", urlStr, bytes.NewBufferString(dataStr))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
