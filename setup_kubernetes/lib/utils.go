@@ -125,7 +125,7 @@ func Run(fleetResult *Result) {
 		var fleetMachine FleetMachine
 		WaitForMetadata(&resultNode, &fleetMachine)
 		markMachineDeployed(fleetMachine.ID)
-		createUnitFiles(*fleetMachine)
+		createUnitFiles(&fleetMachine)
 		fleetMachines = append(fleetMachines, fleetMachine)
 		log.Printf(fleetMachine.String())
 	}
