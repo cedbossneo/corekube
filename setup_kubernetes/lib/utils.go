@@ -92,23 +92,19 @@ func getFleetMachines(fleetResult *Result) {
 	jsonResponse := httpGetRequest(url)
 	err := json.Unmarshal(jsonResponse, fleetResult)
 	checkForErrors(err)
-
 }
 
 func Run(fleetResult *Result) {
+	var fleetMachines FleetMachines
 
 	getFleetMachines(fleetResult)
 	totalMachines := len(fleetResult.Node.Nodes)
 
-	var fleetMachines FleetMachines
-
+	// Get Fleet machines
 	for {
 		log.Printf("Current number of machines found: (%d)\n", totalMachines)
-		time.Sleep(500 * time.Millisecond)
-
+		// Get Fleet machines metadata
 		for _, resultNode := range fleetResult.Node.Nodes {
-
-			// Get fleet metadata
 			var fleetMachine FleetMachine
 			WaitForMetadata(&resultNode, &fleetMachine)
 
@@ -116,6 +112,7 @@ func Run(fleetResult *Result) {
 			log.Printf(fleetMachine.String())
 		}
 
+		time.Sleep(500 * time.Millisecond)
 		getFleetMachines(fleetResult)
 		totalMachines = len(fleetResult.Node.Nodes)
 	}
