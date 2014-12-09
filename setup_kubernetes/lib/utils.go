@@ -64,7 +64,6 @@ func httpPutRequest(
 	case false:
 		//var dataStr = data.(string)
 		req, _ := http.NewRequest("PUT", urlStr, strings.NewReader("value=mike"))
-		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		//req.Header.Add("Content-Length", strconv.Itoa(len(dataStr)))
 	}
 
@@ -95,10 +94,9 @@ func markMachineDeployed(id string) {
 	urlStr := getFullAPIURL("4001", "v2/keys/deploy")
 	data := fmt.Sprintf("value='%s'", id)
 
-	//resp := httpPutRequest(urlStr, data, false)
-	httpPutRequest(urlStr, data, false)
-	//statusCode := resp.StatusCode
-	//log.Printf("Status: %d", statusCode)
+	resp := httpPutRequest(urlStr, data, false)
+	statusCode := resp.StatusCode
+	log.Printf("Status: %d", statusCode)
 }
 
 func Run(fleetResult *Result) {
