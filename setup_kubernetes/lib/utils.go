@@ -102,6 +102,7 @@ func getMachinesDeployed(machines *[]string) {
 	urlStr := getFullAPIURL(ETCD_CLIENT_PORT, path)
 	jsonResponse := httpGetRequest(urlStr)
 	err := json.Unmarshal(jsonResponse, &machines)
+	checkForErrors(err)
 }
 
 func setMachinesDeployed(id string) {
