@@ -241,7 +241,7 @@ func createMinionUnits(fleetMachine *FleetMachine,
 	checkForErrors(err)
 }
 
-func StartUnitsInDir(path string) {
+func startUnitsInDir(path string) {
 	files, _ := ioutil.ReadDir(path)
 
 	for _, f := range files {
@@ -288,7 +288,7 @@ func stringInSlice(a string, list []os.FileInfo) bool {
 	return false
 }
 
-func CheckUnitsState(path, activeState, subState string) {
+func checkUnitsState(path, activeState, subState string) {
 
 	var fleetUnitStates FleetUnitStates
 

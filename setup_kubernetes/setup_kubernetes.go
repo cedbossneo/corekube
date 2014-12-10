@@ -11,8 +11,8 @@ func main() {
 	/*
 		// Start & check state for download & role units
 		for _, v := range unitPathInfo {
-			lib.StartUnitsInDir(v["path"])
-			lib.CheckUnitsState(v["path"], v["activeState"], v["subState"])
+			lib.startUnitsInDir(v["path"])
+			lib.checkUnitsState(v["path"], v["activeState"], v["subState"])
 		}
 
 		// Register minions with master
